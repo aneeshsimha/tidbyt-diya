@@ -158,110 +158,152 @@ def draw_diya_right():
     ]
 
 def draw_flame_left(frame):
-    """Draw flame for left diya"""
-    cycle1 = frame % 16
-    cycle2 = (frame * 2) % 11
-    flicker = (cycle1 + cycle2) % 6
+    """Draw flame for left diya - teardrop shape, flickers to the right"""
+    # Pseudo-random flicker using multiple prime-based cycles
+    c1 = frame % 7
+    c2 = (frame * 3) % 11
+    c3 = (frame * 5) % 13
+    flicker = (c1 + c2 + c3) % 8
 
-    if flicker == 0:
-        h1, h2, h3 = 11, 8, 5
-        w1, w2 = 5, 4
-    elif flicker == 1:
-        h1, h2, h3 = 9, 6, 4
-        w1, w2 = 5, 3
-    elif flicker == 2:
-        h1, h2, h3 = 10, 7, 5
-        w1, w2 = 5, 4
-    elif flicker == 3:
-        h1, h2, h3 = 8, 6, 4
-        w1, w2 = 4, 3
-    elif flicker == 4:
-        h1, h2, h3 = 12, 9, 6
-        w1, w2 = 6, 4
-    else:
-        h1, h2, h3 = 9, 7, 4
-        w1, w2 = 5, 3
+    # Vary height more dramatically for randomness
+    heights = [
+        (12, 10, 7, 4),
+        (10, 8, 5, 3),
+        (11, 9, 6, 4),
+        (9, 7, 5, 3),
+        (13, 11, 8, 5),
+        (10, 8, 6, 3),
+        (11, 9, 7, 4),
+        (9, 7, 5, 3),
+    ]
+    h1, h2, h3, h4 = heights[flicker]
 
-    sway = int(math.sin(float(frame) * 0.1) * 0.8)
+    # Fluid sway with randomness
+    sway = int(math.sin(float(frame) * 0.18) * 1.8 + math.sin(float(frame) * 0.07) * 0.8)
 
-    # Flame at left wick position
     base_x = 23
     base_y = 20
 
+    # Teardrop flame shape - wide at bottom, pointed at top
     return [
+        # Base of flame (widest) - red outer glow
         render.Padding(
-            pad=(base_x + sway, base_y - h1, 0, 0),
-            child=render.Box(width=w1, height=h1, color=FLAME_RED),
+            pad=(base_x + sway, base_y - 3, 0, 0),
+            child=render.Box(width=6, height=3, color=FLAME_RED),
         ),
+        # Lower-mid flame
+        render.Padding(
+            pad=(base_x + sway, base_y - 6, 0, 0),
+            child=render.Box(width=5, height=4, color=FLAME_RED),
+        ),
+        # Mid flame - narrowing
         render.Padding(
             pad=(base_x + 1 + sway, base_y - h2, 0, 0),
-            child=render.Box(width=w2, height=h2, color=FLAME_ORANGE),
+            child=render.Box(width=4, height=h2 - 2, color=FLAME_ORANGE),
+        ),
+        # Upper flame - narrower
+        render.Padding(
+            pad=(base_x + 1 + sway, base_y - h1, 0, 0),
+            child=render.Box(width=3, height=h1 - h2 + 2, color=FLAME_ORANGE),
+        ),
+        # Tip - pointed (1-2 pixels wide)
+        render.Padding(
+            pad=(base_x + 2 + sway, base_y - h1 - 2, 0, 0),
+            child=render.Box(width=2, height=3, color=FLAME_LIGHT_ORANGE),
+        ),
+        # Inner glow - orange/yellow
+        render.Padding(
+            pad=(base_x + 1 + sway, base_y - 5, 0, 0),
+            child=render.Box(width=4, height=4, color=FLAME_ORANGE),
         ),
         render.Padding(
             pad=(base_x + 1 + sway, base_y - h3, 0, 0),
-            child=render.Box(width=w2 - 1, height=h3, color=FLAME_LIGHT_ORANGE),
+            child=render.Box(width=3, height=h3, color=FLAME_LIGHT_ORANGE),
         ),
+        # Hot center - yellow
         render.Padding(
-            pad=(base_x + 1 + sway, base_y - h3 + 1, 0, 0),
-            child=render.Box(width=2, height=h3 - 2 if h3 > 3 else 2, color=FLAME_YELLOW),
+            pad=(base_x + 2 + sway, base_y - h4, 0, 0),
+            child=render.Box(width=2, height=h4, color=FLAME_YELLOW),
         ),
+        # Hottest core - white
         render.Padding(
-            pad=(base_x + 1 + sway, base_y - h3 + 2, 0, 0),
-            child=render.Box(width=2, height=2, color=FLAME_WHITE),
+            pad=(base_x + 2 + sway, base_y - 3, 0, 0),
+            child=render.Box(width=2, height=3, color=FLAME_WHITE),
         ),
     ]
 
 def draw_flame_right(frame):
-    """Draw flame for right diya"""
-    cycle1 = (frame + 7) % 16
-    cycle2 = ((frame + 7) * 2) % 11
-    flicker = (cycle1 + cycle2) % 6
+    """Draw flame for right diya - teardrop shape, mirrored to flicker left"""
+    # Pseudo-random flicker with offset for variety
+    c1 = (frame + 4) % 7
+    c2 = ((frame + 4) * 3) % 11
+    c3 = ((frame + 4) * 5) % 13
+    flicker = (c1 + c2 + c3) % 8
 
-    if flicker == 0:
-        h1, h2, h3 = 11, 8, 5
-        w1, w2 = 5, 4
-    elif flicker == 1:
-        h1, h2, h3 = 9, 6, 4
-        w1, w2 = 5, 3
-    elif flicker == 2:
-        h1, h2, h3 = 10, 7, 5
-        w1, w2 = 5, 4
-    elif flicker == 3:
-        h1, h2, h3 = 8, 6, 4
-        w1, w2 = 4, 3
-    elif flicker == 4:
-        h1, h2, h3 = 12, 9, 6
-        w1, w2 = 6, 4
-    else:
-        h1, h2, h3 = 9, 7, 4
-        w1, w2 = 5, 3
+    # Same height variations
+    heights = [
+        (12, 10, 7, 4),
+        (10, 8, 5, 3),
+        (11, 9, 6, 4),
+        (9, 7, 5, 3),
+        (13, 11, 8, 5),
+        (10, 8, 6, 3),
+        (11, 9, 7, 4),
+        (9, 7, 5, 3),
+    ]
+    h1, h2, h3, h4 = heights[flicker]
 
-    sway = int(math.sin(float(frame) * 0.1 + 2.0) * 0.8)
+    # Mirrored sway - flickers to the LEFT
+    sway = -int(math.sin(float(frame) * 0.18) * 1.8 + math.sin(float(frame) * 0.07) * 0.8)
 
-    # Flame at right wick position
     base_x = 37
     base_y = 20
 
+    # Teardrop flame shape - mirrored (inner layers offset left)
     return [
+        # Base of flame (widest) - red outer glow
         render.Padding(
-            pad=(base_x + sway, base_y - h1, 0, 0),
-            child=render.Box(width=w1, height=h1, color=FLAME_RED),
+            pad=(base_x + sway, base_y - 3, 0, 0),
+            child=render.Box(width=6, height=3, color=FLAME_RED),
+        ),
+        # Lower-mid flame
+        render.Padding(
+            pad=(base_x + 1 + sway, base_y - 6, 0, 0),
+            child=render.Box(width=5, height=4, color=FLAME_RED),
+        ),
+        # Mid flame - narrowing (offset left)
+        render.Padding(
+            pad=(base_x + 1 + sway, base_y - h2, 0, 0),
+            child=render.Box(width=4, height=h2 - 2, color=FLAME_ORANGE),
+        ),
+        # Upper flame - narrower (offset left)
+        render.Padding(
+            pad=(base_x + 2 + sway, base_y - h1, 0, 0),
+            child=render.Box(width=3, height=h1 - h2 + 2, color=FLAME_ORANGE),
+        ),
+        # Tip - pointed (offset left)
+        render.Padding(
+            pad=(base_x + 2 + sway, base_y - h1 - 2, 0, 0),
+            child=render.Box(width=2, height=3, color=FLAME_LIGHT_ORANGE),
+        ),
+        # Inner glow - orange/yellow
+        render.Padding(
+            pad=(base_x + 1 + sway, base_y - 5, 0, 0),
+            child=render.Box(width=4, height=4, color=FLAME_ORANGE),
         ),
         render.Padding(
-            pad=(base_x + sway, base_y - h2, 0, 0),
-            child=render.Box(width=w2, height=h2, color=FLAME_ORANGE),
+            pad=(base_x + 2 + sway, base_y - h3, 0, 0),
+            child=render.Box(width=3, height=h3, color=FLAME_LIGHT_ORANGE),
         ),
+        # Hot center - yellow
         render.Padding(
-            pad=(base_x + sway, base_y - h3, 0, 0),
-            child=render.Box(width=w2 - 1, height=h3, color=FLAME_LIGHT_ORANGE),
+            pad=(base_x + 2 + sway, base_y - h4, 0, 0),
+            child=render.Box(width=2, height=h4, color=FLAME_YELLOW),
         ),
+        # Hottest core - white
         render.Padding(
-            pad=(base_x + 1 + sway, base_y - h3 + 1, 0, 0),
-            child=render.Box(width=2, height=h3 - 2 if h3 > 3 else 2, color=FLAME_YELLOW),
-        ),
-        render.Padding(
-            pad=(base_x + 1 + sway, base_y - h3 + 2, 0, 0),
-            child=render.Box(width=2, height=2, color=FLAME_WHITE),
+            pad=(base_x + 2 + sway, base_y - 3, 0, 0),
+            child=render.Box(width=2, height=3, color=FLAME_WHITE),
         ),
     ]
 
