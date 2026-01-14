@@ -1,6 +1,8 @@
 """
-Diya Flame - A flickering Indian oil lamp animation for Tidbyt
-Displays a traditional diya with an animated flame and glow effect
+Applet: Diya
+Summary: Indian Diya Lamp
+Description: Indian Diya Lamp that flickers slowly.
+Author: aneeshsimha
 """
 
 load("render.star", "render")
@@ -13,8 +15,6 @@ FLAME_YELLOW = "#FFD700"
 FLAME_LIGHT_ORANGE = "#FFB347"
 FLAME_ORANGE = "#FF8C00"
 FLAME_RED = "#FF4500"
-GLOW_SOFT = "#FF6B3520"
-GLOW_WARM = "#FFA50030"
 
 # Clay/terracotta colors
 CLAY_LIGHT = "#E07B53"
@@ -29,179 +29,280 @@ OIL_DARK = "#CC8400"
 
 BACKGROUND = "#0d0805"
 
-def draw_diya():
-    """Draw traditional diya - side/3D view with rounded bowl and spout"""
-    return [
-        # Base/bottom of diya
-        render.Padding(
-            pad=(20, 28, 0, 0),
-            child=render.Box(width=24, height=2, color=CLAY_SHADOW),
-        ),
+def draw_diya_left():
+    """Draw shallow diya on the left side"""
+    x = 0
+    y = 24  # Near bottom
 
-        # Main bowl - rounded shape (side view)
-        # Bottom curve
+    return [
+        # Shallow bowl - wide and flat
+        # Base
         render.Padding(
-            pad=(18, 26, 0, 0),
-            child=render.Box(width=28, height=2, color=CLAY_DARK),
+            pad=(x + 4, y + 4, 0, 0),
+            child=render.Box(width=14, height=1, color=CLAY_SHADOW),
         ),
         # Lower body
         render.Padding(
-            pad=(16, 24, 0, 0),
-            child=render.Box(width=32, height=2, color=CLAY_MID),
+            pad=(x + 3, y + 3, 0, 0),
+            child=render.Box(width=16, height=1, color=CLAY_DARK),
         ),
-        # Middle body (widest)
+        # Main body (wide, shallow)
         render.Padding(
-            pad=(14, 22, 0, 0),
-            child=render.Box(width=36, height=2, color=CLAY_LIGHT),
+            pad=(x + 2, y + 2, 0, 0),
+            child=render.Box(width=18, height=1, color=CLAY_MID),
         ),
-        # Upper body
+        # Upper rim
         render.Padding(
-            pad=(15, 20, 0, 0),
-            child=render.Box(width=34, height=2, color=CLAY_MID),
+            pad=(x + 1, y + 1, 0, 0),
+            child=render.Box(width=20, height=1, color=CLAY_LIGHT),
         ),
-
-        # Rim of the diya
+        # Top rim
         render.Padding(
-            pad=(14, 19, 0, 0),
-            child=render.Box(width=36, height=1, color=CLAY_RIM),
-        ),
-
-        # Spout extension (where wick goes) - extends to the right
-        render.Padding(
-            pad=(48, 20, 0, 0),
-            child=render.Box(width=6, height=2, color=CLAY_MID),
-        ),
-        render.Padding(
-            pad=(52, 19, 0, 0),
-            child=render.Box(width=4, height=1, color=CLAY_RIM),
-        ),
-        render.Padding(
-            pad=(54, 18, 0, 0),
-            child=render.Box(width=3, height=1, color=CLAY_DARK),
+            pad=(x, y, 0, 0),
+            child=render.Box(width=22, height=1, color=CLAY_RIM),
         ),
 
-        # Oil inside the bowl
+        # Spout extending right
         render.Padding(
-            pad=(17, 20, 0, 0),
-            child=render.Box(width=30, height=2, color=OIL_DARK),
+            pad=(x + 20, y + 1, 0, 0),
+            child=render.Box(width=4, height=1, color=CLAY_LIGHT),
         ),
         render.Padding(
-            pad=(18, 20, 0, 0),
-            child=render.Box(width=28, height=1, color=OIL_SURFACE),
+            pad=(x + 22, y, 0, 0),
+            child=render.Box(width=3, height=1, color=CLAY_RIM),
         ),
 
-        # Wick coming out of spout
+        # Oil surface
         render.Padding(
-            pad=(54, 16, 0, 0),
-            child=render.Box(width=2, height=3, color=CLAY_SHADOW),
+            pad=(x + 3, y + 1, 0, 0),
+            child=render.Box(width=16, height=1, color=OIL_DARK),
+        ),
+        render.Padding(
+            pad=(x + 4, y + 1, 0, 0),
+            child=render.Box(width=14, height=1, color=OIL_SURFACE),
+        ),
+
+        # Wick - 80 degree angle (almost vertical, slight lean right)
+        render.Padding(
+            pad=(x + 23, y - 3, 0, 0),
+            child=render.Box(width=2, height=4, color=CLAY_SHADOW),
+        ),
+        render.Padding(
+            pad=(x + 24, y - 4, 0, 0),
+            child=render.Box(width=1, height=2, color=CLAY_SHADOW),
         ),
     ]
 
-def draw_glow(frame):
-    """Draw soft glow around flame"""
-    cycle = frame % 8
-
-    # Pulsing glow effect
-    if cycle < 4:
-        glow_size = 16
-    else:
-        glow_size = 14
+def draw_diya_right():
+    """Draw shallow diya on the right side (mirrored)"""
+    x = 42
+    y = 24
 
     return [
-        # Outer glow
+        # Shallow bowl - wide and flat
+        # Base
         render.Padding(
-            pad=(48, 16 - glow_size, 0, 0),
-            child=render.Box(width=glow_size, height=glow_size, color="#FF450015"),
+            pad=(x + 4, y + 4, 0, 0),
+            child=render.Box(width=14, height=1, color=CLAY_SHADOW),
         ),
-        # Inner glow
+        # Lower body
         render.Padding(
-            pad=(50, 16 - glow_size + 2, 0, 0),
-            child=render.Box(width=glow_size - 4, height=glow_size - 2, color="#FF8C0020"),
+            pad=(x + 3, y + 3, 0, 0),
+            child=render.Box(width=16, height=1, color=CLAY_DARK),
+        ),
+        # Main body
+        render.Padding(
+            pad=(x + 2, y + 2, 0, 0),
+            child=render.Box(width=18, height=1, color=CLAY_MID),
+        ),
+        # Upper rim
+        render.Padding(
+            pad=(x + 1, y + 1, 0, 0),
+            child=render.Box(width=20, height=1, color=CLAY_LIGHT),
+        ),
+        # Top rim
+        render.Padding(
+            pad=(x, y, 0, 0),
+            child=render.Box(width=22, height=1, color=CLAY_RIM),
+        ),
+
+        # Spout extending left
+        render.Padding(
+            pad=(x - 2, y + 1, 0, 0),
+            child=render.Box(width=4, height=1, color=CLAY_LIGHT),
+        ),
+        render.Padding(
+            pad=(x - 3, y, 0, 0),
+            child=render.Box(width=3, height=1, color=CLAY_RIM),
+        ),
+
+        # Oil surface
+        render.Padding(
+            pad=(x + 3, y + 1, 0, 0),
+            child=render.Box(width=16, height=1, color=OIL_DARK),
+        ),
+        render.Padding(
+            pad=(x + 4, y + 1, 0, 0),
+            child=render.Box(width=14, height=1, color=OIL_SURFACE),
+        ),
+
+        # Wick - 80 degree angle (almost vertical, slight lean left)
+        render.Padding(
+            pad=(x - 3, y - 3, 0, 0),
+            child=render.Box(width=2, height=4, color=CLAY_SHADOW),
+        ),
+        render.Padding(
+            pad=(x - 4, y - 4, 0, 0),
+            child=render.Box(width=1, height=2, color=CLAY_SHADOW),
         ),
     ]
 
-def draw_flame(frame):
-    """Draw animated flame with realistic flickering"""
-    # Slow, organic flickering pattern
+def draw_flame_left(frame):
+    """Draw flame for left diya"""
     cycle1 = frame % 16
     cycle2 = (frame * 2) % 11
-
     flicker = (cycle1 + cycle2) % 6
 
-    # Flame dimensions - tall teardrop shape
     if flicker == 0:
-        h1, h2, h3, h4 = 14, 11, 8, 4
-        w1, w2 = 8, 6
+        h1, h2, h3 = 11, 8, 5
+        w1, w2 = 5, 4
     elif flicker == 1:
-        h1, h2, h3, h4 = 12, 9, 6, 3
-        w1, w2 = 7, 5
+        h1, h2, h3 = 9, 6, 4
+        w1, w2 = 5, 3
     elif flicker == 2:
-        h1, h2, h3, h4 = 13, 10, 7, 4
-        w1, w2 = 8, 6
+        h1, h2, h3 = 10, 7, 5
+        w1, w2 = 5, 4
     elif flicker == 3:
-        h1, h2, h3, h4 = 11, 8, 6, 3
-        w1, w2 = 7, 5
+        h1, h2, h3 = 8, 6, 4
+        w1, w2 = 4, 3
     elif flicker == 4:
-        h1, h2, h3, h4 = 15, 12, 9, 5
-        w1, w2 = 8, 6
+        h1, h2, h3 = 12, 9, 6
+        w1, w2 = 6, 4
     else:
-        h1, h2, h3, h4 = 12, 10, 7, 4
-        w1, w2 = 7, 5
+        h1, h2, h3 = 9, 7, 4
+        w1, w2 = 5, 3
 
-    # Gentle sway
-    sway = int(math.sin(float(frame) * 0.12) * 1.2)
+    sway = int(math.sin(float(frame) * 0.1) * 0.8)
 
-    # Flame position (at the wick/spout)
-    base_x = 52
-    base_y = 16
+    # Flame at left wick position
+    base_x = 23
+    base_y = 20
 
     return [
-        # Outer flame (deep red-orange)
         render.Padding(
             pad=(base_x + sway, base_y - h1, 0, 0),
             child=render.Box(width=w1, height=h1, color=FLAME_RED),
         ),
-        # Middle-outer flame (orange)
         render.Padding(
             pad=(base_x + 1 + sway, base_y - h2, 0, 0),
             child=render.Box(width=w2, height=h2, color=FLAME_ORANGE),
         ),
-        # Middle flame (light orange)
         render.Padding(
             pad=(base_x + 1 + sway, base_y - h3, 0, 0),
             child=render.Box(width=w2 - 1, height=h3, color=FLAME_LIGHT_ORANGE),
         ),
-        # Inner flame (bright yellow)
         render.Padding(
-            pad=(base_x + 2 + sway, base_y - h4 - 1, 0, 0),
-            child=render.Box(width=4, height=h4, color=FLAME_YELLOW),
+            pad=(base_x + 1 + sway, base_y - h3 + 1, 0, 0),
+            child=render.Box(width=2, height=h3 - 2 if h3 > 3 else 2, color=FLAME_YELLOW),
         ),
-        # Hottest center (white)
         render.Padding(
-            pad=(base_x + 2 + sway, base_y - h4 + 1, 0, 0),
-            child=render.Box(width=3, height=h4 - 2 if h4 > 3 else 2, color=FLAME_WHITE),
-        ),
-        # Flame tip
-        render.Padding(
-            pad=(base_x + 2 + sway, base_y - h1 - 1, 0, 0),
-            child=render.Box(width=2, height=2, color=FLAME_ORANGE),
+            pad=(base_x + 1 + sway, base_y - h3 + 2, 0, 0),
+            child=render.Box(width=2, height=2, color=FLAME_WHITE),
         ),
     ]
 
-def main():
+def draw_flame_right(frame):
+    """Draw flame for right diya"""
+    cycle1 = (frame + 7) % 16
+    cycle2 = ((frame + 7) * 2) % 11
+    flicker = (cycle1 + cycle2) % 6
+
+    if flicker == 0:
+        h1, h2, h3 = 11, 8, 5
+        w1, w2 = 5, 4
+    elif flicker == 1:
+        h1, h2, h3 = 9, 6, 4
+        w1, w2 = 5, 3
+    elif flicker == 2:
+        h1, h2, h3 = 10, 7, 5
+        w1, w2 = 5, 4
+    elif flicker == 3:
+        h1, h2, h3 = 8, 6, 4
+        w1, w2 = 4, 3
+    elif flicker == 4:
+        h1, h2, h3 = 12, 9, 6
+        w1, w2 = 6, 4
+    else:
+        h1, h2, h3 = 9, 7, 4
+        w1, w2 = 5, 3
+
+    sway = int(math.sin(float(frame) * 0.1 + 2.0) * 0.8)
+
+    # Flame at right wick position
+    base_x = 37
+    base_y = 20
+
+    return [
+        render.Padding(
+            pad=(base_x + sway, base_y - h1, 0, 0),
+            child=render.Box(width=w1, height=h1, color=FLAME_RED),
+        ),
+        render.Padding(
+            pad=(base_x + sway, base_y - h2, 0, 0),
+            child=render.Box(width=w2, height=h2, color=FLAME_ORANGE),
+        ),
+        render.Padding(
+            pad=(base_x + sway, base_y - h3, 0, 0),
+            child=render.Box(width=w2 - 1, height=h3, color=FLAME_LIGHT_ORANGE),
+        ),
+        render.Padding(
+            pad=(base_x + 1 + sway, base_y - h3 + 1, 0, 0),
+            child=render.Box(width=2, height=h3 - 2 if h3 > 3 else 2, color=FLAME_YELLOW),
+        ),
+        render.Padding(
+            pad=(base_x + 1 + sway, base_y - h3 + 2, 0, 0),
+            child=render.Box(width=2, height=2, color=FLAME_WHITE),
+        ),
+    ]
+
+def draw_glow_left(frame):
+    """Glow for left flame"""
+    cycle = frame % 10
+    size = 10 if cycle < 5 else 8
+
+    return [
+        render.Padding(
+            pad=(21, 20 - size, 0, 0),
+            child=render.Box(width=size, height=size, color="#FF450010"),
+        ),
+    ]
+
+def draw_glow_right(frame):
+    """Glow for right flame"""
+    cycle = (frame + 5) % 10
+    size = 10 if cycle < 5 else 8
+
+    return [
+        render.Padding(
+            pad=(35, 20 - size, 0, 0),
+            child=render.Box(width=size, height=size, color="#FF450010"),
+        ),
+    ]
+
+def main(config):
     """Main app entry point"""
 
     frames = []
     for i in range(32):
         frame_elements = [
             render.Box(width=64, height=32, color=BACKGROUND),
-        ] + draw_glow(i) + draw_diya() + draw_flame(i)
+        ] + draw_glow_left(i) + draw_glow_right(i) + draw_diya_left() + draw_diya_right() + draw_flame_left(i) + draw_flame_right(i)
 
         frames.append(
             render.Stack(children=frame_elements)
         )
 
     return render.Root(
-        delay=150,  # Slower, relaxed animation
+        delay=150,
         child=render.Animation(children=frames),
     )
